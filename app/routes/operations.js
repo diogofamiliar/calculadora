@@ -1,26 +1,26 @@
+
 module.exports = function (application) {
 
 	const { body, validationResult } = require('express-validator');
 
 	application.get(
 		'/sum',
-		body('a','Numéricos apenas.').notEmpty().isNumeric(),
+		body('a', 'Numéricos apenas.').notEmpty().isNumeric(),
 		body('b', 'Numérico apenas.').notEmpty().isNumeric(),
 		function (req, res) {
-			console.log(req.ip)
 			try {
 				validationResult(req).throw();
 			} catch (err) {
 				return res.status(400).json({ errors: err.array() });
 			}
+			  
+			var OperationsModel = new application.app.models.OperationsModel(req);
 
-			var OperationsModel = new application.app.models.OperationsModel();
-
-			OperationsModel.sum(req, function (result) {
+			OperationsModel.sum(function (result) {
 				res.send(result);
 			});
-	});
-	
+		});
+
 	application.get(
 		'/div',
 		body('a', 'Numéricos apenas.').notEmpty().isNumeric(),
@@ -37,8 +37,8 @@ module.exports = function (application) {
 			OperationsModel.div(req, function (result) {
 				res.send(result);
 			});
-	});
-	
+		});
+
 	application.get(
 		'/sub',
 		body('a', 'Numéricos apenas.').notEmpty().isNumeric(),
@@ -55,5 +55,5 @@ module.exports = function (application) {
 			OperationsModel.sub(req, function (result) {
 				res.send(result);
 			});
-	});
+		});
 }; 
